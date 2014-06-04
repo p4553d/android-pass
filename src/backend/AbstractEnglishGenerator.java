@@ -10,16 +10,26 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
+/**
+ * Class with markov chain to generate pronounceable and rememberable passwords. Class do not include entropy generation
+ * and need an external producer of 64 bits (long) seed.
+ * 
+ * @author p4553d
+ * 
+ */
 public abstract class AbstractEnglishGenerator implements IPassGenerator {
 
     private HashMap<String, Vector<String>> m_chain;
+    private static String empty_prefix = "-";
+    private static int number_generator = 1000;
+
+    protected static String ressource = "./ressource/english";
 
     public AbstractEnglishGenerator() {
 	m_chain = new HashMap<String, Vector<String>>();
 
 	// read config and build mapping
-	File inFile = new java.io.File("./ressource/english"); // TODO
-							       // configurable!
+	File inFile = new java.io.File(ressource);
 	BufferedReader inStream = null;
 	try {
 	    inStream = new BufferedReader(new InputStreamReader(
@@ -44,7 +54,6 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
 	} catch (FileNotFoundException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {
-	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}
     }
@@ -71,6 +80,45 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
     }
 
     /**
+     * Produce rememberable password from entropy seed
+     * 
+     * @param seed
+     * @return
+     */
+    private String humanize(long seed) {
+	String result = "";
+	String current = empty_prefix;
+
+	while (seed > 0) {
+	    Vector<String> next_list = m_chain.get(current);
+
+	    // defensive against dead-ends
+	    if (next_list == null) {
+		current = empty_prefix;
+		continue;
+	    }
+
+	    // generate some numbers
+	    if (seed < number_generator) {
+		int number = (int) (seed % number_generator);
+		seed = seed / number_generator; // TODO: to refactor, can be execute only once
+		result = result + "-" + number;
+		continue;
+	    }
+
+	    int next_length = next_list.size();
+
+	    int index = (int) (seed % next_length); // determine index of next syllable
+	    seed = seed / next_length; // reduce number
+
+	    current = next_list.get(index);
+	    result = result + current;
+	}
+
+	return result;
+    }
+
+    /**
      * Abstract method to produce entropy as seed for human-readable password.
      * 
      * @param master
@@ -79,12 +127,13 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
      *            name for web site
      * @return byte array with raw output
      */
-    public abstract byte[] generateHash(String master, String site);
+    protected abstract long generateHash(String master, String site);
 
     @Override
     public String generatePassword(String master, String site) {
-	// TODO Auto-generated method stub
-	return null;
+	String password = null;
+	long seed = generateHash(master, site);
+	password = humanize(seed);
+	return password;
     }
-
 }
