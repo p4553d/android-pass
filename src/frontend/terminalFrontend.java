@@ -15,7 +15,7 @@ public class terminalFrontend {
      */
     public static void main(String[] args) {
 	MD5EnglishGenerator gen = new MD5EnglishGenerator();
-	System.out.print(gen.generatePassword("", ""));
+	System.out.print(gen.generatePassword("12345678901", "google.de"));
     }
 
 }

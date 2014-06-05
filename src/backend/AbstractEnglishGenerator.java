@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
@@ -21,7 +22,7 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
 
     private HashMap<String, Vector<String>> m_chain;
     private static String empty_prefix = "-";
-    private static int number_generator = 1000;
+    private static BigInteger number_generator = BigInteger.valueOf(1000);
 
     protected static String ressource = "./ressource/english";
 
@@ -85,11 +86,11 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
      * @param seed
      * @return
      */
-    private String humanize(long seed) {
+    private String humanize(BigInteger seed) {
 	String result = "";
 	String current = empty_prefix;
 
-	while (seed > 0) {
+	while (seed.compareTo(BigInteger.ZERO) > 0) {
 	    Vector<String> next_list = m_chain.get(current);
 
 	    // defensive against dead-ends
@@ -99,17 +100,25 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
 	    }
 
 	    // generate some numbers
-	    if (seed < number_generator) {
-		int number = (int) (seed % number_generator);
-		seed = seed / number_generator; // TODO: to refactor, can be execute only once
+	    if (seed.compareTo(number_generator) <= 0) {
+
+		BigInteger[] tmp = seed.divideAndRemainder(number_generator);
+
+		// TODO: to refactor, can be execute only once
+		seed = tmp[0]; // reduce number
+		int number = tmp[1].intValue();
+
 		result = result + "-" + number;
 		continue;
 	    }
 
 	    int next_length = next_list.size();
 
-	    int index = (int) (seed % next_length); // determine index of next syllable
-	    seed = seed / next_length; // reduce number
+	    BigInteger[] tmp = seed.divideAndRemainder(BigInteger
+		    .valueOf(next_length));
+
+	    seed = tmp[0]; // reduce number
+	    int index = tmp[1].intValue(); // determine index of next syllable
 
 	    current = next_list.get(index);
 	    result = result + current;
@@ -127,12 +136,13 @@ public abstract class AbstractEnglishGenerator implements IPassGenerator {
      *            name for web site
      * @return byte array with raw output
      */
-    protected abstract long generateHash(String master, String site);
+    protected abstract BigInteger generateHash(String master, String site);
 
     @Override
     public String generatePassword(String master, String site) {
 	String password = null;
-	long seed = generateHash(master, site);
+	BigInteger seed = generateHash(master, site);
+	System.out.println(seed); // TODO: debug
 	password = humanize(seed);
 	return password;
     }
