@@ -1,6 +1,5 @@
-package backend;
+package backend.seedgenerator;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -10,8 +9,8 @@ import java.security.NoSuchAlgorithmException;
  * @author p4553d
  * 
  */
-public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
-	IPassGenerator {
+public class MD5SeedGenerator extends AbstractSeedGenerator implements
+	ISeedGenerator {
 
     // numbers of rounds, used for "harden" md5
     private static int rounds = 10;
@@ -21,11 +20,7 @@ public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
     private static int lastByte = 7;
 
     @Override
-    /**
-     * Implementation of mdpass method to generate random
-     */
-    protected BigInteger generateHash(String master, String site) {
-	BigInteger res;
+    public byte[] generateSeed(String master, String site) {
 	byte[] masterBytes = master.getBytes();
 	byte[] siteBytes = site.getBytes();
 
@@ -53,9 +48,7 @@ public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
 	current = md.digest(current);
 
 	// produce seed (long) out of hash
-	byte[] ext = extractUnsign(current, firstByte, lastByte);
-	res = new BigInteger(ext);
-
-	return res;
+	byte[] ext = extract(current, firstByte, lastByte);
+	return ext;
     }
 }
