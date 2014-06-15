@@ -15,14 +15,21 @@ public class SHAEnglishGenerator extends AbstractEnglishGenerator implements
 	IPassGenerator {
 
     // how much entropy should pass have
+    // default value is minimum
     private int entropyByteLength = 5;
 
     // hash description
     private String hashDesc = "SHA-512";
     private int hashLength = 64;
 
-    public SHAEnglishGenerator(int entropy) {
-	// TODO: check to stay under max and above meaningful min
+    public SHAEnglishGenerator(int entropy) throws Exception {
+	// check to stay under max and above meaningful min
+	if (entropy > hashLength / 2 || entropy < entropyByteLength) {
+	    throw new Exception(
+		    "Inappropriate entropy requierement given, should be between "
+			    + hashLength / 2 + " and " + entropyByteLength);
+	}
+
 	this.entropyByteLength = entropy;
     }
 
@@ -52,10 +59,10 @@ public class SHAEnglishGenerator extends AbstractEnglishGenerator implements
 
 	// fold hash-value to target entropy
 	int numFoldings = hashLength / entropyByteLength;
-	byte[] entropy = new byte[entropyByteLength];
+	byte[] entropy = new byte[entropyByteLength + 1];
 
 	for (int i = 0; i < numFoldings; i++) {
-	    byte[] mask = extract(hash, entropyByteLength * i,
+	    byte[] mask = extractUnsign(hash, entropyByteLength * i,
 		    entropyByteLength * (i + 1) - 1);
 	    XOR(entropy, mask);
 	}

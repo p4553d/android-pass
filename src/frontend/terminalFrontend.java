@@ -13,8 +13,9 @@ public class terminalFrontend {
 
     /**
      * @param args
+     * @throws Exception
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 	IPassGenerator gen = new SHAEnglishGenerator(5);
 	System.out.print(gen.generatePassword("12345678901", "google.de")); // theitheuseeingerms-463
 	System.out.println();
