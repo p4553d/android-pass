@@ -13,8 +13,22 @@ import java.security.NoSuchAlgorithmException;
 public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
 	IPassGenerator {
 
+    // numbers of rounds, used for "harden" md5
     private static int rounds = 10;
 
+    // Bytes from which a entropy is extracted
+    private static int firstByte = 3;
+    private static int lastByte = 7;
+
+    /**
+     * Concatenate two byte arrays
+     * 
+     * @param a
+     *            first array
+     * @param b
+     *            second array
+     * @return resulting array containing values of array a followed by values of b
+     */
     private static byte[] concatenate(byte[] a, byte[] b) {
 	int aLen = a.length;
 	int bLen = b.length;
@@ -27,6 +41,18 @@ public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
 	return res;
     }
 
+    /**
+     * Clip a part of byte array. First byte ist preset to be 0, due later conversion to unsigned BigInt and avoiding
+     * negative numbers.
+     * 
+     * @param a
+     *            source array
+     * @param start
+     *            first byte to be include
+     * @param stop
+     *            last byte to be include
+     * @return extraction of source array
+     */
     private static byte[] extract(byte[] a, int start, int stop) {
 	// TODO: some checks was useful
 
@@ -41,9 +67,15 @@ public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
 	return res;
     }
 
+    /**
+     * Construct string representation of byte array. Without 0x-prefix and low-case letters.
+     * 
+     * @param bytes
+     * @return byte array with ascii-values of string representation.
+     */
     private static byte[] hexify(byte[] bytes) {
 	char[] hexArray = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'A', 'B', 'C', 'D', 'E', 'F' };
+		'a', 'b', 'c', 'd', 'e', 'f' };
 	byte[] hexChars = new byte[bytes.length * 2];
 	int v;
 
@@ -74,6 +106,7 @@ public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
 	}
 
 	// hash master password and site in multiple rounds
+	// compute hash in hex form
 	for (int i = 0; i < rounds; i++) {
 	    current = hexify(md.digest(current));
 	}
@@ -83,11 +116,11 @@ public class MD5EnglishGenerator extends AbstractEnglishGenerator implements
 	for (int i = 0; i < rounds; i++) {
 	    current = hexify(md.digest(current));
 	}
+	// compute hash raw
 	current = md.digest(current);
 
 	// produce seed (long) out of hash
-	byte[] ext = extract(current, 11, 15); // TODO: get rid of magic numbers
-
+	byte[] ext = extract(current, firstByte, lastByte);
 	res = new BigInteger(ext);
 
 	return res;
