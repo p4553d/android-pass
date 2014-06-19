@@ -1,12 +1,12 @@
 package frontend.gui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -17,31 +17,13 @@ import net.miginfocom.swing.MigLayout;
  */
 public class PassWindowView {
 
-    // TODO: Refactor to meaningfull names
     // TODO: Check usability
     private JFrame frame;
-    private JTextField textField_2;
-    private JTextField textField_3;
-    private JPasswordField passwordField;
-    private JPasswordField passwordField_1;
-    private JButton btnNewButton;
-
-    /**
-     * Launch the application.
-     */
-    // TODO: to remove
-    public static void main(String[] args) {
-	EventQueue.invokeLater(new Runnable() {
-	    public void run() {
-		try {
-		    PassWindowView window = new PassWindowView();
-		    window.frame.setVisible(true);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-	    }
-	});
-    }
+    private JTextField textSiteName;
+    private JTextField textPassword;
+    private JPasswordField passwordMaster;
+    private JPasswordField passwordMasterRpt;
+    private JButton btnGenerate;
 
     /**
      * Create the application.
@@ -61,27 +43,48 @@ public class PassWindowView {
 	frame.getContentPane().setLayout(
 		new MigLayout("", "[grow][][grow]", "[][][][]"));
 
-	passwordField = new JPasswordField();
-	frame.getContentPane().add(passwordField, "cell 0 0,growx");
+	passwordMaster = new JPasswordField();
+	frame.getContentPane().add(passwordMaster, "cell 0 0,growx");
 
-	passwordField_1 = new JPasswordField();
-	frame.getContentPane().add(passwordField_1, "cell 2 0,growx");
+	passwordMasterRpt = new JPasswordField();
+	frame.getContentPane().add(passwordMasterRpt, "cell 2 0,growx");
 
-	textField_2 = new JTextField();
-	frame.getContentPane().add(textField_2, "cell 0 1 3 1,growx");
-	textField_2.setColumns(10);
+	textSiteName = new JTextField();
+	textSiteName.setHorizontalAlignment(SwingConstants.CENTER);
+	frame.getContentPane().add(textSiteName, "cell 0 1 3 1,growx");
+	textSiteName.setColumns(10);
 
-	textField_3 = new JTextField();
-	textField_3.setEnabled(false);
-	textField_3.setEditable(false);
-	frame.getContentPane().add(textField_3, "cell 0 2 3 1,growx");
-	textField_3.setColumns(10);
+	textPassword = new JTextField();
+	textPassword.setHorizontalAlignment(SwingConstants.CENTER);
+	textPassword.setEditable(false);
+	frame.getContentPane().add(textPassword, "cell 0 2 3 1,growx");
+	textPassword.setColumns(10);
 
-	btnNewButton = new JButton("generate");
-	frame.getContentPane().add(btnNewButton, "cell 2 3,growx");
+	btnGenerate = new JButton("generate");
+	frame.getContentPane().add(btnGenerate, "cell 2 3,alignx trailing");
     }
 
-    void setGenerateButtonListener(ActionListener l) {
-	this.btnNewButton.addActionListener(l);
+    public void setVisible() {
+	this.frame.setVisible(true);
+    }
+
+    public void setGenerateButtonListener(ActionListener l) {
+	this.btnGenerate.addActionListener(l);
+    }
+
+    public String getMaster() {
+	return new String(passwordMaster.getPassword());
+    }
+
+    public String getMasterRpt() {
+	return new String(passwordMasterRpt.getPassword());
+    }
+
+    public String getSiteName() {
+	return textSiteName.getText();
+    }
+
+    public void setPassword(String text) {
+	textPassword.setText(text);
     }
 }
