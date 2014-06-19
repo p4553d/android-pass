@@ -1,4 +1,4 @@
-package frontend;
+package frontend.terminal;
 
 import backend.PassGenerator;
 import backend.humanizer.IHumanizer;
@@ -7,7 +7,7 @@ import backend.seedgenerator.ISeedGenerator;
 import backend.seedgenerator.SHASeedGenerator;
 
 /**
- * Basic terminal frontend
+ * TODO: Basic terminal frontend
  * 
  * @author p4553d
  * 

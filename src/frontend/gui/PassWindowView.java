@@ -1,31 +1,40 @@
-package frontend;
+package frontend.gui;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-public class PassWindow {
+/**
+ * 
+ * @author p4553d
+ * 
+ */
+public class PassWindowView {
 
+    // TODO: Refactor to meaningfull names
+    // TODO: Check usability
     private JFrame frame;
     private JTextField textField_2;
     private JTextField textField_3;
-    private JLabel lblNewLabel;
     private JPasswordField passwordField;
     private JPasswordField passwordField_1;
+    private JButton btnNewButton;
 
     /**
      * Launch the application.
      */
+    // TODO: to remove
     public static void main(String[] args) {
 	EventQueue.invokeLater(new Runnable() {
 	    public void run() {
 		try {
-		    PassWindow window = new PassWindow();
+		    PassWindowView window = new PassWindowView();
 		    window.frame.setVisible(true);
 		} catch (Exception e) {
 		    e.printStackTrace();
@@ -37,8 +46,8 @@ public class PassWindow {
     /**
      * Create the application.
      */
-    public PassWindow() {
-	initialize();
+    public PassWindowView() {
+	initialize(); // visible part of GUI
     }
 
     /**
@@ -47,10 +56,10 @@ public class PassWindow {
     private void initialize() {
 	frame = new JFrame();
 	frame.setResizable(false);
-	frame.setBounds(100, 100, 361, 112);
+	frame.setBounds(100, 100, 361, 154);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.getContentPane().setLayout(
-		new MigLayout("", "[grow][][grow]", "[][][]"));
+		new MigLayout("", "[grow][][grow]", "[][][][]"));
 
 	passwordField = new JPasswordField();
 	frame.getContentPane().add(passwordField, "cell 0 0,growx");
@@ -67,5 +76,12 @@ public class PassWindow {
 	textField_3.setEditable(false);
 	frame.getContentPane().add(textField_3, "cell 0 2 3 1,growx");
 	textField_3.setColumns(10);
+
+	btnNewButton = new JButton("generate");
+	frame.getContentPane().add(btnNewButton, "cell 2 3,growx");
+    }
+
+    void setGenerateButtonListener(ActionListener l) {
+	this.btnNewButton.addActionListener(l);
     }
 }
