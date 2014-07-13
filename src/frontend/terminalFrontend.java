@@ -24,8 +24,12 @@ public class terminalFrontend {
 	IHumanizer h = new MarkovEnglishHumanizer();
 
 	PassGenerator gen = new PassGenerator(sg, h);
-	System.out.print(gen.generatePassword("12345678901", "google.de")); // theitheuseeingerms-463
+	System.out.print(gen.generatePassword("12345678901", "google.de")); // orig: theitheuseeingerms-463
+	// whoddength-aid-745
 	System.out.println();
-	System.out.print(gen.generatePassword("abcdefghijk", "google.de")); // spalay-nys-191
+	System.out.print(gen.generatePassword("abcdefghijk", "google.de")); // orig: spalay-nys-191
+	// jalreans-th--266
+	System.out.println();
+	System.out.print(gen.generatePassword("t", "t")); // snargods-ti-285
     }
 }
