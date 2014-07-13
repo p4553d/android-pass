@@ -7,6 +7,7 @@ import java.io.InputStream;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.ClipboardManager;
 import android.view.View;
 import android.widget.EditText;
 import backend.PassGenerator;
@@ -44,12 +45,11 @@ public class YouShallPassActivity extends Activity {
     }
 
     public void generate(View v) {
-	generatePassword();
+	generatePassword(false);
     }
 
     public void generateAndCopy(View v) {
-	generatePassword();
-	copyToBuffer();
+	generatePassword(true);
     }
 
     private String getMaster() {
@@ -72,7 +72,7 @@ public class YouShallPassActivity extends Activity {
 	etmp.setText(value);
     }
 
-    private void generatePassword() {
+    private void generatePassword(boolean copyToClipboard) {
 
 	boolean error = false; // not yet
 	String output = "+ + +";
@@ -99,14 +99,14 @@ public class YouShallPassActivity extends Activity {
 	// generate password
 	if (!error) {
 	    output = m_generator.generatePassword(master, siteName);
+
+	    if (copyToClipboard) {
+		ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		cm.setText(output);
+	    }
 	}
 
 	// output
 	setPassword(output);
     }
-
-    private void copyToBuffer() {
-
-    }
-
 }
