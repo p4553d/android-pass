@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/editTextMasterpassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Master password"
+        android:inputType="textPassword" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editTextMasterpasswordRepeat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Master password repeated"
+        android:inputType="textPassword" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTextView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Site name"
+        android:singleLine="true"
+        android:text="AutoCompleteTextView" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="none"
+        android:text="Password" />
+
+    <Button
+        android:id="@+id/buttonGenerate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="generate"
+        android:text="Generate" />
+
+</LinearLayout>
