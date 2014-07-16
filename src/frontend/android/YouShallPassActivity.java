@@ -6,6 +6,7 @@ package frontend.android;
 import java.io.InputStream;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.View;
@@ -57,6 +58,11 @@ public class YouShallPassActivity extends Activity {
 	return etmp.getText().toString();
     }
 
+    private void setFocusOnMaster() {
+	EditText etmp = (EditText) findViewById(R.id.editTextMasterPassword);
+	etmp.requestFocus();
+    }
+
     private String getMasterRpt() {
 	EditText etmp = (EditText) findViewById(R.id.editTextMasterPasswordRepeat);
 	return etmp.getText().toString();
@@ -67,8 +73,20 @@ public class YouShallPassActivity extends Activity {
 	return etmp.getText().toString();
     }
 
-    private void setPassword(String value) {
+    private void setFocusOnSiteName() {
+	EditText etmp = (EditText) findViewById(R.id.editTextSiteName);
+	etmp.requestFocus();
+    }
+
+    private void setPasswordError(String value) {
 	EditText etmp = (EditText) findViewById(R.id.editTextPassword);
+	etmp.setTextColor(Color.RED);
+	etmp.setText(value);
+    }
+
+    private void setPasswordOk(String value) {
+	EditText etmp = (EditText) findViewById(R.id.editTextPassword);
+	etmp.setTextColor(Color.BLACK);
 	etmp.setText(value);
     }
 
@@ -84,14 +102,21 @@ public class YouShallPassActivity extends Activity {
 	String siteName = getSiteName();
 
 	// check plausibility
+	// and do funcy focus
 	if (master.isEmpty() || siteName.isEmpty()) { // neither master, nor site should be empty
 	    error = true;
 	    output = "Provide both, master password and site name!";
+	    if (master.isEmpty()) {
+		setFocusOnMaster();
+	    } else {
+		setFocusOnSiteName();
+	    }
 	}
 
 	if (!masterRpt.isEmpty() && !masterRpt.equals(master)) { // if master repeat provided, have to be equal
 	    error = true;
 	    output = "Master password and confirmation differ!";
+	    setFocusOnMaster();
 	}
 
 	// TODO: master length?
@@ -104,9 +129,13 @@ public class YouShallPassActivity extends Activity {
 		ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 		cm.setText(output);
 	    }
+	    setPasswordOk(output);
+	} else {
+	    setPasswordError(output);
 	}
 
 	// output
-	setPassword(output);
+
     }
+
 }
