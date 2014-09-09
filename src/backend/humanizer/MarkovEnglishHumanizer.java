@@ -24,7 +24,7 @@ public class MarkovEnglishHumanizer implements IHumanizer {
     private static String empty_prefix = "-";
     private static BigInteger number_generator = BigInteger.valueOf(1000);
 
-    protected static String ressource = "./res/raw/english";
+    protected static String ressource = "/res/raw/english"; // dirty hack TODO: make it android-compatible
 
     public MarkovEnglishHumanizer() {
 	m_chain = new HashMap<String, Vector<String>>();
@@ -65,6 +65,37 @@ public class MarkovEnglishHumanizer implements IHumanizer {
 
 	    inStream.close();
 
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+    }
+
+    public MarkovEnglishHumanizer(InputStream is) {
+	m_chain = new HashMap<String, Vector<String>>();
+
+	// read config and build mapping
+	BufferedReader inStream = null;
+	try {
+	    inStream = new BufferedReader(new InputStreamReader(is));
+
+	    String line = null;
+
+	    while ((line = inStream.readLine()) != null) { // c - yeah!
+		String[] result = line.split(":");
+		String[] values = result[1].split(" ");
+
+		// just for debug mode
+		assert !result[0].equals("");
+		assert !result[1].equals("");
+
+		Vector<String> v = new Vector<String>(Arrays.asList(values));
+		m_chain.put(result[0], v);
+	    }
+
+	    inStream.close();
+
+	} catch (FileNotFoundException e) {
+	    e.printStackTrace();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
