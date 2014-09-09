@@ -1,5 +1,8 @@
 package frontend.gui;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -74,7 +77,12 @@ public class PassWindowController {
 	m_view.setPassword(output);
 
 	// copy to buffer if success
-	// TODO
+	if (!error) {
+	    Clipboard clipboard = Toolkit.getDefaultToolkit()
+		    .getSystemClipboard();
+	    StringSelection copyOutput = new StringSelection(output);
+	    clipboard.setContents(copyOutput, null);
+	}
 
 	// blend out based on timer(?)
 	// TODO
