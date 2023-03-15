@@ -1,7 +1,6 @@
 package backend.humanizer;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -31,11 +30,24 @@ public class MarkovEnglishHumanizer implements IHumanizer {
 	m_chain = new HashMap<String, Vector<String>>();
 
 	// read config and build mapping
-	File inFile = new java.io.File(ressource);
+	InputStream ressourceStream;
+	ressourceStream = getClass().getClassLoader().getResourceAsStream(
+		ressource);
+
+	if (ressourceStream == null) { // do we running outside of jar?
+	    try {
+		ressourceStream = new FileInputStream(new java.io.File(
+			ressource));
+	    } catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+
 	BufferedReader inStream = null;
 	try {
-	    inStream = new BufferedReader(new InputStreamReader(
-		    new FileInputStream(inFile)));
+	    inStream = new BufferedReader(
+		    new InputStreamReader(ressourceStream));
 
 	    String line = null;
 
@@ -53,8 +65,6 @@ public class MarkovEnglishHumanizer implements IHumanizer {
 
 	    inStream.close();
 
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
