@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="controller.js"></script>
+        <script src="shaSeedGenerator.js"></script>
+        <script src="humanizer.js"></script>
+        <script src="sha512.js"></script>
+        <script src="english.json"></script>
+    </head>
+
+    <body>
+        <table>
+            <tr>
+              <th>Master</th>
+              <th><input type="password" id="master1" name="master1"></th>
+            </tr>
+            <tr>
+                <th>Master</th>
+                <th><input type="password" id="master2" name="master2"></th>
+            </tr>
+            <tr>
+                <th>Ressource</th>
+                <th><input type="text" id="ressource" name="ressource"></th>
+            </tr>
+            <tr>
+                <th>&nbsp;</th>
+                <th>
+                    <input type="button" id="genLower" value="generate" onclick="generateLower();">
+                    &nbsp;
+                    <input type="button" id="genUpper" value="Generate" onclick="generateUpper();">
+                </th>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <th><input type="text" id="password" name="password"></th>
+            </tr>
+        </table>
+    </body>
+</html>
