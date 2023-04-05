@@ -1,3 +1,7 @@
+/**
+ * Password generator - wrapper class for cryptographic 
+ * operations and string generation
+ */
 
 class PasswordGenerator {
     constructor(sg, h) {

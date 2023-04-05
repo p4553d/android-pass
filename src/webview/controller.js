@@ -1,33 +1,44 @@
 /**
- * 
+ * Binding model-view-controller in connection with HTML-representation
  */
-function getValidatedInputs(){
-    master1 = document.getElementById("master1").value;
-    master2 = document.getElementById("master2").value;
-    ressource = document.getElementById("ressource").value;
 
-    if (master1== "" || ressource == "" || (master2 !="" && master1 != master2)){
-        r = null;
-    }
-    else {
-        r = {"m1":master1, "m2":master2, "r":ressource};
-    }
-   
-    return r;
-}
+// Model
+const h = new MarkovHumanizer(mdmapping);
+const sg = new seedGenerator();
+const gp = new PasswordGenerator(sg, h);
 
-function setPasswordField(text, errorstate = false){
-    document.getElementById("password").value = text;
-}
+// View
+const v = new View();
 
+// Controller
+/**
+ * Generate password as-is, all lower case.
+ */
 function generateLower(){
-    input = getValidatedInputs();
-    if (input == null){
-        setPasswordField(" - invalid Input -", true);
-        return;
+    v.readInputs();
+    var valid = v.validateInput();
+    if (valid){
+        let pass = gp.generatePassword(v.getMaster(), v.getRessource());
+        v.setPasswordField(pass);
+    }
+    else{
+        v.setPasswordField(v.getErrorMessage());
     }
 }
 
-function generateUpper(){
-    
+/**
+ * Generate password with first letter uppercase.
+ */
+function generateUpper(){    
+    v.readInputs();
+    var valid = v.validateInput();
+    if (valid){
+        let pass = gp.generatePassword(v.getMaster(), v.getRessource());
+        // set upper case for first letter
+        let upass = pass.charAt(0).toUpperCase() + pass.slice(1);
+        v.setPasswordField(upass);
+    }
+    else{
+        v.setPasswordField(v.getErrorMessage());
+    }
 }
